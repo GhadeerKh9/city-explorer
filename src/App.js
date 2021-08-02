@@ -68,13 +68,10 @@ class App extends React.Component {
           />
         )}
         {this.state.showError && this.errorMsg}
-        <Card>
-          <Card.Body>{this.state.showError && this.errorMsg}</Card.Body>
-        </Card>
+        <p>{this.state.showError && this.errorMsg}</p>
       </>
     );
   }
 }
 
 export default App;
-console.log(results.data);
