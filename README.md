@@ -1,3 +1,24 @@
+Project Name City explorer
+
+**Author**: Ghadeer Khasawneh
+**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+
+## Overview
+
+This application is used to build a front end page that renders the name, address and geographical location of any city you enter in the form provided, and creating the API server as well.
+
+## Getting Started
+
+The steps needed are as follows: create react app, connect it to a repo of the same name, amend this app according to what is needed, deploy the page so anyone can see it.
+
+## Architecture
+
+We are using VScode text editor, JavaScript language, react app, Bootsrap, axios library to build the frontend side, and Node.js, express framework to build the backend side.
+
+## Change Log
+
+2/8/2021 4:37 pm react app was created
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
