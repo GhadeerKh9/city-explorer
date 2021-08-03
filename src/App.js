@@ -77,4 +77,3 @@ class App extends React.Component {
 }
 
 export default App;
-console.log(results.data);
