@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col } from "react-bootstrap";
 import MoviesInfo from "./components/MoviesInfo";
-// import WeatherInfo from "./components/WeatherInfo";
+import WeatherInfo from "./components/WeatherInfo";
 
 class App extends React.Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class App extends React.Component {
   handleWeather = () => {
     axios
       .get(
-        `http://localhost:3070/weather?name=${this.state.inputName}&lon=${this.state.long}&lat=${this.state.lat}`
+        `${process.env.REACT_APP_URL}/weather?name=${this.state.inputName}&lon=${this.state.long}&lat=${this.state.lat}`
       )
       .then((weatherOutputs) => {
         this.setState({
@@ -64,7 +65,7 @@ class App extends React.Component {
 
   handleMovies = () => {
     axios
-      .get(`http://localhost:3070/movies?name=${this.state.inputName}`)
+      .get(`${process.env.REACT_APP_URL}/movies?name=${this.state.inputName}`)
       .then((moviesOutputs) => {
         this.setState({
           moviesArray: moviesOutputs.data,
@@ -79,25 +80,33 @@ class App extends React.Component {
 
   render() {
     return (
-      <>
-        <form onSubmit={this.gettingOutput}>
-          <input type="text" placeholder="Enter A City Name" name="cityName" />
-          <button type="submit">Explore!</button>
-        </form>
-
-        {/* {this.state.weatherArray
-          ? this.state.weatherArray.map((item) => {
-              return (
-                <>
-                  {item.desc}
-                  {item.date}
-                </>
-              );
-            })
-          : null} */}
-
-        <MoviesInfo newArr={this.state.moviesArray} />
-      </>
+      <Container>
+        <Row className="mb-4">
+          <h1>City Explorer</h1>
+        </Row>
+        <Row className="mb-4">
+          <form onSubmit={this.gettingOutput}>
+            <input
+              type="text"
+              placeholder="Enter A City Name"
+              name="cityName"
+            />
+            <button type="submit">Explore!</button>
+          </form>
+        </Row>
+        <Row className="mb-4">
+          <h2>Weather Status</h2>
+        </Row>
+        <Row>
+          <WeatherInfo newWarr={this.state.weatherArray} />
+        </Row>
+        <Row className="mb-4 mt-3">
+          <h2>Movies</h2>
+        </Row>
+        <Row>
+          <MoviesInfo newArr={this.state.moviesArray} />
+        </Row>
+      </Container>
     );
   }
 }
