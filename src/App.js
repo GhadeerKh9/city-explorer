@@ -1,85 +1,104 @@
 import React from "react";
-import axios from "axios"
-
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import MoviesInfo from "./components/MoviesInfo";
+// import WeatherInfo from "./components/WeatherInfo";
 
 class App extends React.Component {
-constructor(props) {
-  super(props)
-  this.state = {
-    weatherArray: [],
-    moviesArray: [],
-    long: '',
-    lat: ''
-
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      // moviesArray: [],
+      // inputName: "",
+      long: 0,
+      lat: 0,
+    };
   }
 
-}
+  gettingOutput = async (event) => {
+    event.preventDefault();
+    await this.setState({
+      inputName: event.target.cityName.value,
+    });
+    console.log(this.state.inputName);
+    await this.handleLocation();
+    await this.handleMovies();
+  };
 
-gettingOutput = (event) => {
-  event.preventDefault();
-  const inputName = event.target.cityName.value;
-  
+  handleLocation = () => {
+    axios
+      .get(
+        `https://eu1.locationiq.com/v1/search.php?key=pk.2c03634bd163d80e7a5aa70cb849b566&q=${this.state.inputName}&format=json`
+      )
+      .then((locationOutputs) => {
+        this.setState({
+          long: locationOutputs.data[0].lon,
+          lat: locationOutputs.data[0].lat,
+        });
+        console.log(this.state.long, this.state.lat);
+        this.handleWeather();
+        // this.handleMovies();
+      })
 
-  let urlIQ = `https://eu1.locationiq.com/v1/search.php?key=pk.2c03634bd163d80e7a5aa70cb849b566&q=${inputName}&format=json`;
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  axios.get(urlIQ).then(locationOutputs => {this.setState({
-    long: locationOutputs.data[0].lon,
-    lat: locationOutputs.data[0].lat
-  })})
-  
+  handleWeather = () => {
+    axios
+      .get(
+        `http://localhost:3070/weather?name=${this.state.inputName}&lon=${this.state.long}&lat=${this.state.lat}`
+      )
+      .then((weatherOutputs) => {
+        this.setState({
+          weatherArray: weatherOutputs.data,
+        });
+        console.log(this.state.weatherArray);
+      })
 
-  const urlServer = `http://localhost:3050/weather?name=${inputName}&lon=${this.state.long}&lat=${this.state.lat}`
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
+  handleMovies = () => {
+    axios
+      .get(`http://localhost:3070/movies?name=${this.state.inputName}`)
+      .then((moviesOutputs) => {
+        this.setState({
+          moviesArray: moviesOutputs.data,
+        });
+        console.log(this.state.moviesArray);
+      })
 
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  axios.get(urlServer).then(weatherOutputs => {this.setState({
-    weatherArray: weatherOutputs.data
-  })})
-
-
-  .catch(err => {console.log(err)})
-
-}
-
-
-
-
-// .then(moviesOutputs => {this.setState({
-//   moviesArray: moviesOutputs.data
-// })})
-
-
-
-
-render() {
-  
-
-return(
-  <>
-    <form onSubmit={this.gettingOutput}>
-    <input type="text" placeholder= "Enter A City Name" name= "cityName" />
-     <button type="submit">Explore!</button>
-
-
-    </form>
-    {this.state.weatherArray.map(item =>{
+  render() {
     return (
-      <p>desc = {item.desc}</p>
-    )
+      <>
+        <form onSubmit={this.gettingOutput}>
+          <input type="text" placeholder="Enter A City Name" name="cityName" />
+          <button type="submit">Explore!</button>
+        </form>
 
-    })}
+        {/* {this.state.weatherArray
+          ? this.state.weatherArray.map((item) => {
+              return (
+                <>
+                  {item.desc}
+                  {item.date}
+                </>
+              );
+            })
+          : null} */}
 
-   
-  
-
-  </>
-)
-}
-
-
+        <MoviesInfo newArr={this.state.moviesArray} />
+      </>
+    );
+  }
 }
 export default App;
-
-
-
