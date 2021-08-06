@@ -27,7 +27,7 @@ class WeatherInfo extends React.Component {
         {this.props.newWarr
           ? this.props.newWarr.map((item) => {
               return (
-                <Col className="mb-1">
+                <Col className="mb-4">
                   <Card border="primary" style={{ width: "18rem" }}>
                     <Card.Header>{item.date}</Card.Header>
                     <Card.Body>

@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
+
 import MoviesInfo from "./components/MoviesInfo";
 import WeatherInfo from "./components/WeatherInfo";
 
@@ -13,6 +14,8 @@ class App extends React.Component {
       // inputName: "",
       long: 0,
       lat: 0,
+      mapShown: false,
+      dataShown: false,
     };
   }
 
@@ -35,6 +38,8 @@ class App extends React.Component {
         this.setState({
           long: locationOutputs.data[0].lon,
           lat: locationOutputs.data[0].lat,
+          mapShown: true,
+          dataShown: true,
         });
         console.log(this.state.long, this.state.lat);
         this.handleWeather();
@@ -94,15 +99,38 @@ class App extends React.Component {
             <button type="submit">Explore!</button>
           </form>
         </Row>
-        <Row className="mb-4">
-          <h2>Weather Status</h2>
+        <Row>
+          <div>
+            {this.state.dataShown && (
+              <Col className="mb-4">
+                <Card border="primary" style={{ width: "18rem" }}>
+                  <Card.Header>
+                    Location Name: {this.state.inputName}
+                  </Card.Header>
+                  <Card.Body>
+                    <Card.Text>City Latitude: {this.state.lat}</Card.Text>
+                    <Card.Text>City longitude: {this.state.long}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            )}
+          </div>
         </Row>
+        <Row>
+          <div>
+            {this.state.mapShown && (
+              <img
+                src={`https://maps.locationiq.com/v3/staticmap?key=pk.2c03634bd163d80e7a5aa70cb849b566&center=${this.state.lat},${this.state.long}`}
+                alt="Map"
+              />
+            )}
+          </div>
+        </Row>
+
         <Row>
           <WeatherInfo newWarr={this.state.weatherArray} />
         </Row>
-        <Row className="mb-4 mt-3">
-          <h2>Movies</h2>
-        </Row>
+
         <Row>
           <MoviesInfo newArr={this.state.moviesArray} />
         </Row>
